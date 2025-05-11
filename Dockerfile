@@ -34,6 +34,7 @@ RUN sed -i 's/deb.debian.org/mirrors.ustc.edu.cn/g' /etc/apt/sources.list.d/debi
     && rm -rf /var/lib/apt/lists/*
 
 COPY . /fba
+COPY deploy/backend/docker-compose/.env.server /fba/backend/.env
 
 COPY --from=builder /usr/local /usr/local
 
