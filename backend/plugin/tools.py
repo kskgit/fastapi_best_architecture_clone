@@ -19,18 +19,18 @@ from backend.utils.import_parse import import_module_cached
 
 
 class PluginInjectError(Exception):
-    """插件注入错误"""
+    """Plugin injection error"""
 
 
 def get_plugins() -> list[str]:
-    """获取插件列表"""
+    """Get plugin list"""
     plugin_packages = []
 
-    # 遍历插件目录
+    # Iterate through the plugin directory
     for item in os.listdir(PLUGIN_DIR):
         item_path = os.path.join(PLUGIN_DIR, item)
 
-        # 检查是否为目录且包含 __init__.py 文件
+        # Check if it is a directory and contains the __init__.py file
         if os.path.isdir(item_path) and '__init__.py' in os.listdir(item_path):
             plugin_packages.append(item)
 
@@ -38,18 +38,18 @@ def get_plugins() -> list[str]:
 
 
 def get_plugin_models() -> list[type]:
-    """获取插件所有模型类"""
+    """Get all plugin model classes"""
     classes = []
 
-    # 获取所有插件
+    # Get all plugins
     plugins = get_plugins()
 
     for plugin in plugins:
-        # 导入插件的模型模块
+        # Import the plugin's model module
         module_path = f'backend.plugin.{plugin}.model'
         module = import_module_cached(module_path)
 
-        # 获取模块中的所有类
+        # Get all classes in the module
         for name, obj in inspect.getmembers(module):
             if inspect.isclass(obj):
                 classes.append(obj)
@@ -59,9 +59,9 @@ def get_plugin_models() -> list[type]:
 
 def load_plugin_config(plugin: str) -> dict[str, Any]:
     """
-    加载插件配置
+    Load plugin configuration
 
-    :param plugin: 插件名称
+    :param plugin: Plugin name
     :return:
     """
     toml_path = os.path.join(PLUGIN_DIR, plugin, 'plugin.toml')
@@ -74,15 +74,15 @@ def load_plugin_config(plugin: str) -> dict[str, Any]:
 
 def inject_extra_router(plugin: str, data: dict[str, Any]) -> None:
     """
-    扩展级插件路由注入
+    Extended plugin route injection
 
-    :param plugin: 插件名称
-    :param data: 插件配置数据
+    :param plugin: Plugin name
+    :param data: Plugin configuration data
     :return:
     """
     app_include = data.get('app', {}).get('include', '')
     if not app_include:
-        raise PluginInjectError(f'扩展级插件 {plugin} 配置文件存在错误，请检查')
+        raise PluginInjectError(f'扩展级插件 {plugin} 配置文件存在错误，请检查插件是否合法')
 
     plugin_api_path = os.path.join(PLUGIN_DIR, plugin, 'api')
     if not os.path.exists(plugin_api_path):
@@ -93,12 +93,12 @@ def inject_extra_router(plugin: str, data: dict[str, Any]) -> None:
             if not (file.endswith('.py') and file != '__init__.py'):
                 continue
 
-            # 解析插件路由配置
+            # Parse plugin route configuration
             file_config = data.get('api', {}).get(f'{file[:-3]}', {})
             prefix = file_config.get('prefix', '')
             tags = file_config.get('tags', [])
 
-            # 获取插件路由模块
+            # Get plugin route module
             file_path = os.path.join(root, file)
             path_to_module_str = os.path.relpath(file_path, PLUGIN_DIR).replace(os.sep, '.')[:-3]
             module_path = f'backend.plugin.{path_to_module_str}'
@@ -113,7 +113,7 @@ def inject_extra_router(plugin: str, data: dict[str, Any]) -> None:
                     )
                     continue
 
-                # 获取目标 app 路由
+                # Get the target app route
                 relative_path = os.path.relpath(root, plugin_api_path)
                 target_module_path = f'backend.app.{app_include}.api.{relative_path.replace(os.sep, ".")}'
                 target_module = import_module_cached(target_module_path)
@@ -124,7 +124,7 @@ def inject_extra_router(plugin: str, data: dict[str, Any]) -> None:
                         f'扩展级插件 {plugin} 模块 {module_path} 中没有有效的 router，请检查插件文件是否完整'
                     )
 
-                # 将插件路由注入到目标路由中
+                # Inject the plugin route into the target route
                 target_router.include_router(
                     router=plugin_router,
                     prefix=prefix,
@@ -136,11 +136,11 @@ def inject_extra_router(plugin: str, data: dict[str, Any]) -> None:
 
 def inject_app_router(plugin: str, data: dict[str, Any], target_router: APIRouter) -> None:
     """
-    应用级插件路由注入
+    Application-level plugin route injection
 
-    :param plugin: 插件名称
-    :param data: 插件配置数据
-    :param target_router: FastAPI 路由器
+    :param plugin: Plugin name
+    :param data: Plugin configuration data
+    :param target_router: FastAPI router
     :return:
     """
     module_path = f'backend.plugin.{plugin}.api.router'
@@ -164,7 +164,7 @@ def inject_app_router(plugin: str, data: dict[str, Any], target_router: APIRoute
 
 
 def build_final_router() -> APIRouter:
-    """构建最终路由"""
+    """Build final route"""
 
     extra_plugins = []
     app_plugins = []
@@ -176,7 +176,7 @@ def build_final_router() -> APIRouter:
     for plugin, data in extra_plugins:
         inject_extra_router(plugin, data)
 
-    # 主路由，必须在插件路由注入后导入
+    # The main route must be imported after the plugin route is injected
     from backend.app.router import router as main_router
 
     for plugin, data in app_plugins:
@@ -187,10 +187,10 @@ def build_final_router() -> APIRouter:
 
 def _install_plugin_requirements(plugin: str, requirements_file: str) -> None:
     """
-    安装单个插件的依赖
+    Install the dependencies of a single plugin
 
-    :param plugin: 插件名称
-    :param requirements_file: 依赖文件路径
+    :param plugin: Plugin name
+    :param requirements_file: Dependency file path
     :return:
     """
     try:
@@ -205,7 +205,7 @@ def _install_plugin_requirements(plugin: str, requirements_file: str) -> None:
 
 
 def install_requirements() -> None:
-    """安装插件依赖"""
+    """Install plugin dependencies"""
     for plugin in get_plugins():
         requirements_file = os.path.join(PLUGIN_DIR, plugin, 'requirements.txt')
         if os.path.exists(requirements_file):
@@ -214,9 +214,9 @@ def install_requirements() -> None:
 
 async def install_requirements_async() -> None:
     """
-    异步安装插件依赖
+    Asynchronously install plugin dependencies
 
-    由于 Windows 平台限制，无法实现完美的全异步方案，详情：
+    Due to Windows platform limitations, a perfect fully asynchronous solution cannot be achieved. Details:
     https://stackoverflow.com/questions/44633458/why-am-i-getting-notimplementederror-with-async-and-await-on-windows
     """
     await run_in_threadpool(install_requirements)
