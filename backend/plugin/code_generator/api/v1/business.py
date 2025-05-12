@@ -20,23 +20,23 @@ from backend.plugin.code_generator.service.column_service import gen_model_servi
 router = APIRouter()
 
 
-@router.get('/all', summary='获取所有代码生成业务', dependencies=[DependsJwtAuth])
+@router.get('/all', summary='Get all code generation businesses', dependencies=[DependsJwtAuth])
 async def get_all_businesses() -> ResponseSchemaModel[list[GetGenBusinessDetail]]:
     data = await gen_business_service.get_all()
     return response_base.success(data=data)
 
 
-@router.get('/{pk}', summary='获取代码生成业务详情', dependencies=[DependsJwtAuth])
+@router.get('/{pk}', summary='Get code generation business details', dependencies=[DependsJwtAuth])
 async def get_business(
-    pk: Annotated[int, Path(description='业务 ID')],
+    pk: Annotated[int, Path(description='Business ID')],
 ) -> ResponseSchemaModel[GetGenBusinessDetail]:
     data = await gen_business_service.get(pk=pk)
     return response_base.success(data=data)
 
 
-@router.get('/{pk}/models', summary='获取代码生成业务所有模型', dependencies=[DependsJwtAuth])
+@router.get('/{pk}/models', summary='Get all code generation business models', dependencies=[DependsJwtAuth])
 async def get_business_all_models(
-    pk: Annotated[int, Path(description='业务 ID')],
+    pk: Annotated[int, Path(description='Business ID')],
 ) -> ResponseSchemaModel[list[GetGenModelDetail]]:
     data = await gen_model_service.get_by_business(business_id=pk)
     return response_base.success(data=data)
@@ -65,7 +65,7 @@ async def create_business(obj: CreateGenBusinessParam) -> ResponseModel:
     ],
 )
 async def update_business(
-    pk: Annotated[int, Path(description='业务 ID')], obj: UpdateGenBusinessParam
+    pk: Annotated[int, Path(description='Business ID')], obj: UpdateGenBusinessParam
 ) -> ResponseModel:
     count = await gen_business_service.update(pk=pk, obj=obj)
     if count > 0:
@@ -81,7 +81,7 @@ async def update_business(
         DependsRBAC,
     ],
 )
-async def delete_business(pk: Annotated[int, Path(description='业务 ID')]) -> ResponseModel:
+async def delete_business(pk: Annotated[int, Path(description='Business ID')]) -> ResponseModel:
     count = await gen_business_service.delete(pk=pk)
     if count > 0:
         return response_base.success()

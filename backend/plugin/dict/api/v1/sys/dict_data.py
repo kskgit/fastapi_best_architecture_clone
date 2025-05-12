@@ -21,9 +21,9 @@ from backend.plugin.dict.service.dict_data_service import dict_data_service
 router = APIRouter()
 
 
-@router.get('/{pk}', summary='获取字典详情', dependencies=[DependsJwtAuth])
+@router.get('/{pk}', summary='Get dictionary details', dependencies=[DependsJwtAuth])
 async def get_dict_data(
-    pk: Annotated[int, Path(description='字典数据 ID')],
+    pk: Annotated[int, Path(description='Dictionary data ID')],
 ) -> ResponseSchemaModel[GetDictDataWithRelation]:
     data = await dict_data_service.get(pk=pk)
     return response_base.success(data=data)
@@ -39,9 +39,9 @@ async def get_dict_data(
 )
 async def get_pagination_dict_datas(
     db: CurrentSession,
-    label: Annotated[str | None, Query(description='字典数据标签')] = None,
-    value: Annotated[str | None, Query(description='字典数据键值')] = None,
-    status: Annotated[int | None, Query(description='状态')] = None,
+    label: Annotated[str | None, Query(description='Dictionary data label')] = None,
+    value: Annotated[str | None, Query(description='Dictionary data key value')] = None,
+    status: Annotated[int | None, Query(description='Status')] = None,
 ) -> ResponseSchemaModel[PageData[GetDictDataDetail]]:
     dict_data_select = await dict_data_service.get_select(label=label, value=value, status=status)
     page_data = await paging_data(db, dict_data_select)
@@ -70,7 +70,7 @@ async def create_dict_data(obj: CreateDictDataParam) -> ResponseModel:
     ],
 )
 async def update_dict_data(
-    pk: Annotated[int, Path(description='字典数据 ID')], obj: UpdateDictDataParam
+    pk: Annotated[int, Path(description='Dictionary data ID')], obj: UpdateDictDataParam
 ) -> ResponseModel:
     count = await dict_data_service.update(pk=pk, obj=obj)
     if count > 0:
@@ -86,7 +86,7 @@ async def update_dict_data(
         DependsRBAC,
     ],
 )
-async def delete_dict_data(pk: Annotated[list[int], Query(description='字典数据 ID 列表')]) -> ResponseModel:
+async def delete_dict_data(pk: Annotated[list[int], Query(description='Dictionary data ID list')]) -> ResponseModel:
     count = await dict_data_service.delete(pk=pk)
     if count > 0:
         return response_base.success()

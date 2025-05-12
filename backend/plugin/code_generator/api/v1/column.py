@@ -14,14 +14,14 @@ from backend.plugin.code_generator.service.column_service import gen_model_servi
 router = APIRouter()
 
 
-@router.get('/types', summary='获取代码生成模型列类型', dependencies=[DependsJwtAuth])
+@router.get('/types', summary='Get code generation model column type', dependencies=[DependsJwtAuth])
 async def get_model_types() -> ResponseSchemaModel[list[str]]:
     model_types = await gen_model_service.get_types()
     return response_base.success(data=model_types)
 
 
-@router.get('/{pk}', summary='获取代码生成模型详情', dependencies=[DependsJwtAuth])
-async def get_model(pk: Annotated[int, Path(description='模型 ID')]) -> ResponseSchemaModel[GetGenModelDetail]:
+@router.get('/{pk}', summary='Get code generation model details', dependencies=[DependsJwtAuth])
+async def get_model(pk: Annotated[int, Path(description='Model ID')]) -> ResponseSchemaModel[GetGenModelDetail]:
     data = await gen_model_service.get(pk=pk)
     return response_base.success(data=data)
 
@@ -47,7 +47,7 @@ async def create_model(obj: CreateGenModelParam) -> ResponseModel:
         DependsRBAC,
     ],
 )
-async def update_model(pk: Annotated[int, Path(description='模型 ID')], obj: UpdateGenModelParam) -> ResponseModel:
+async def update_model(pk: Annotated[int, Path(description='Model ID')], obj: UpdateGenModelParam) -> ResponseModel:
     count = await gen_model_service.update(pk=pk, obj=obj)
     if count > 0:
         return response_base.success()
@@ -62,7 +62,7 @@ async def update_model(pk: Annotated[int, Path(description='模型 ID')], obj: U
         DependsRBAC,
     ],
 )
-async def delete_model(pk: Annotated[int, Path(description='模型 ID')]) -> ResponseModel:
+async def delete_model(pk: Annotated[int, Path(description='Model ID')]) -> ResponseModel:
     count = await gen_model_service.delete(pk=pk)
     if count > 0:
         return response_base.success()

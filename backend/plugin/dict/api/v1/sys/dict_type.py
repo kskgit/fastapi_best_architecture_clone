@@ -18,7 +18,7 @@ router = APIRouter()
 
 @router.get(
     '',
-    summary='分页获取所有字典类型',
+    summary='Paginate to get all dictionary types',
     dependencies=[
         DependsJwtAuth,
         DependsPagination,
@@ -26,9 +26,9 @@ router = APIRouter()
 )
 async def get_pagination_dict_types(
     db: CurrentSession,
-    name: Annotated[str | None, Query(description='字典类型名称')] = None,
-    code: Annotated[str | None, Query(description='字典类型编码')] = None,
-    status: Annotated[int | None, Query(description='状态')] = None,
+    name: Annotated[str | None, Query(description='Dictionary type name')] = None,
+    code: Annotated[str | None, Query(description='Dictionary type code')] = None,
+    status: Annotated[int | None, Query(description='Status')] = None,
 ) -> ResponseSchemaModel[PageData[GetDictTypeDetail]]:
     dict_type_select = await dict_type_service.get_select(name=name, code=code, status=status)
     page_data = await paging_data(db, dict_type_select)
@@ -57,7 +57,7 @@ async def create_dict_type(obj: CreateDictTypeParam) -> ResponseModel:
     ],
 )
 async def update_dict_type(
-    pk: Annotated[int, Path(description='字典类型 ID')], obj: UpdateDictTypeParam
+    pk: Annotated[int, Path(description='Dictionary type ID')], obj: UpdateDictTypeParam
 ) -> ResponseModel:
     count = await dict_type_service.update(pk=pk, obj=obj)
     if count > 0:
@@ -73,7 +73,7 @@ async def update_dict_type(
         DependsRBAC,
     ],
 )
-async def delete_dict_type(pk: Annotated[list[int], Query(description='字典类型 ID 列表')]) -> ResponseModel:
+async def delete_dict_type(pk: Annotated[list[int], Query(description='Dictionary type ID list')]) -> ResponseModel:
     count = await dict_type_service.delete(pk=pk)
     if count > 0:
         return response_base.success()

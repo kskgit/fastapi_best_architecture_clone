@@ -79,7 +79,10 @@ class ResponseBase:
         :param data: Return data
         :return:
         """
-        return ResponseModel(code=res.code, msg=res.msg, data=data)
+        if isinstance(res, CustomResponseCode):
+            return ResponseModel(code=res.code, msg=res.msg, data=data)
+        else:
+            return ResponseModel(code=res.code, msg=res.msg, data=data)
 
     def success(
         self,
@@ -98,7 +101,7 @@ class ResponseBase:
         """
         if schema:
             return ResponseSchemaModel[schema](code=res.code, msg=res.msg, data=data)
-        return self.__response(res=res, data=data)
+        return ResponseModel(code=res.code, msg=res.msg, data=data)
 
     def fail(
         self,
