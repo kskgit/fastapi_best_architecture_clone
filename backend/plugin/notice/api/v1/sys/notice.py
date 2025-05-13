@@ -38,7 +38,7 @@ async def get_pagination_notices(db: CurrentSession) -> ResponseSchemaModel[Page
 
 @router.post(
     '',
-    summary='创建通知公告',
+    summary='Create a notice',
     dependencies=[
         Depends(RequestPermission('sys:notice:add')),
         DependsRBAC,

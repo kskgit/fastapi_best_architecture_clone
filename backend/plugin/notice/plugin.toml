@@ -3,4 +3,4 @@ include = 'admin'
 
 [api.notice]
 prefix = '/notices'
-tags = '系统通知公告'
+tags = 'notice'

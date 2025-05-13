@@ -14,7 +14,7 @@ from backend.app.admin.api.v1.sys.user import router as user_router
 
 router = APIRouter(prefix='/sys')
 
-router.include_router(dept_router, prefix='/depts', tags=['系统部门'])
+router.include_router(dept_router, prefix='/depts', tags=['admin'])
 router.include_router(menu_router, prefix='/menus', tags=['系统菜单'])
 router.include_router(role_router, prefix='/roles', tags=['系统角色'])
 router.include_router(user_router, prefix='/users', tags=['系统用户'])
