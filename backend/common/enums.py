@@ -115,7 +115,23 @@ class UserSocialType(StrEnum):
 
 
 class FileType(StrEnum):
-    """文件类型"""
+    """ファイルタイプ"""
 
     image = 'image'
     video = 'video'
+
+
+class TodoStatus(StrEnum):
+    """TODO ステータス"""
+
+    pending = 'pending'
+    in_progress = 'in_progress'
+    completed = 'completed'
+
+
+class TodoPriority(StrEnum):
+    """TODO 優先度"""
+
+    low = 'low'
+    medium = 'medium'
+    high = 'high'
