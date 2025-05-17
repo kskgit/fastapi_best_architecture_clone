@@ -22,6 +22,8 @@ from backend.common.security.jwt import get_hash_password, get_token, jwt_decode
 from backend.core.conf import settings
 from backend.database.db import async_db_session
 from backend.database.redis import redis_client
+from backend.app.todo.crud.crud_todo import crud_todo
+from backend.app.todo.schema.todo import TodoCreateParam
 
 
 class UserService:
@@ -329,4 +331,18 @@ class UserService:
             return count
 
 
+class TodoService:
+    @staticmethod
+    async def create(*, obj: TodoCreateParam) -> None:
+        """
+        Todoを作成する
+
+        :param obj: Todo作成パラメータ
+        :return:
+        """
+        async with async_db_session.begin() as db:
+            await crud_todo.create(db, obj)
+
+
 user_service: UserService = UserService()
+todo_service: TodoService = TodoService()

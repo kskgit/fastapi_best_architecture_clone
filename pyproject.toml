@@ -55,6 +55,7 @@ dependencies = [
 dev = [
     "pytest>=8.0.0",
     "pytest-sugar>=1.0.0",
+    "ruff>=0.11.10",
 ]
 lint = [
     "pre-commit>=4.0.0",

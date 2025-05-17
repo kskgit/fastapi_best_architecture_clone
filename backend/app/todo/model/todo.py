@@ -3,7 +3,7 @@
 from datetime import datetime
 
 from sqlalchemy import DateTime, String
-from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.orm import Mapped, mapped_column, declared_attr
 
 from backend.common.model import Base, id_key
 from backend.app.todo.schema.todo import TodoStatus, TodoPriority
@@ -13,7 +13,9 @@ from backend.utils.timezone import timezone
 class Todo(Base):
     """TODO"""
 
-    __tablename__ = 'todo'
+    @declared_attr.directive
+    def __tablename__(cls) -> str:
+        return 'todo'
 
     id: Mapped[id_key] = mapped_column(init=False)
     title: Mapped[str] = mapped_column(String(100), index=True, comment='タイトル')

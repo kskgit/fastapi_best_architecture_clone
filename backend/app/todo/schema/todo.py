@@ -1,10 +1,8 @@
 from datetime import datetime
 from enum import Enum
-from typing import Optional
-
-from pydantic import BaseModel, Field
 
 from backend.common.schema import SchemaBase
+from pydantic import Field
 
 
 class TodoPriority(str, Enum):
@@ -24,11 +22,15 @@ class TodoStatus(str, Enum):
     canceled = 'canceled'
 
 
-class TodoCreate(SchemaBase):
-    """TODO 作成"""
+class TodoSchemaBase(SchemaBase):
+    """ベースパラメータ"""
 
     title: str = Field(..., description='タイトル')
     description: str | None = Field(None, description='説明')
     due_date: datetime | None = Field(None, description='期日')
     priority: TodoPriority = Field(TodoPriority.medium, description='優先度')
     status: TodoStatus = Field(TodoStatus.pending, description='ステータス')
+
+
+class TodoCreateParam(TodoSchemaBase):
+    """Todo作成パラメータ"""

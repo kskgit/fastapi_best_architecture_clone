@@ -7,7 +7,7 @@ from pydantic import BaseModel, ConfigDict, EmailStr, Field, validate_email
 
 from backend.core.conf import settings
 
-# 自定义验证错误信息，参考：
+# Customizing Validation Error Messages，参考：
 # https://github.com/pydantic/pydantic-core/blob/a5cb7382643415b716b1a7a5392914e50f726528/tests/test_errors.py#L266
 # https://github.com/pydantic/pydantic/blob/caa78016433ec9b16a973f92f187a7b6bfde6cb5/docs/errors/errors.md?plain=1#L232
 CUSTOM_VALIDATION_ERROR_MESSAGES = {
