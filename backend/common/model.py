@@ -74,14 +74,3 @@ class Base(DataClassBase, DateTimeMixin):
     """
 
     __abstract__ = True
-
-
-class Todo(Base):
-    """TODO"""
-
-    id: Mapped[id_key] = mapped_column(init=False)
-    title: Mapped[str] = mapped_column(comment='タイトル')
-    description: Mapped[str | None] = mapped_column(nullable=True, default=None, comment='説明')
-    due_date: Mapped[datetime | None] = mapped_column(DateTime(timezone=True), nullable=True, default=None, comment='期日')
-    status: Mapped[str] = mapped_column(default=None, nullable=True, comment='ステータス')
-    priority: Mapped[str] = mapped_column(default=None, nullable=True, comment='優先度')

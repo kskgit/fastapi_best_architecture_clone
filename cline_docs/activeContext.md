@@ -7,7 +7,5 @@ TODO機能のデータモデルから作成を開始します。
 4. Writing a service
 5. Writing database operations (crud)
 
-現在、APIエンドポイントの定義でエラーが発生しています。
-他の実装を参考に修正を試みましたが、うまくいきませんでした。
-一旦ここで終了し、メモリーバンクを更新します。
-次のステップは、APIエンドポイントの定義を修正することです。
+TODO関連のファイルは`app/todo`配下にまとめる方針とします。
+`backend/common/model.py`に`Todo`モデルが定義されていることを確認し、TODOテーブルを作成します。
