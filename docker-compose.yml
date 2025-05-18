@@ -20,8 +20,7 @@ services:
       - -c
       - |
         wait-for-it -s fba_mysql:3306 -s fba_redis:6379 -t 300
-        supervisord -c /etc/supervisor/supervisord.conf
-        supervisorctl restart
+        python backend/run.py
 
   fba_mysql:
     image: mysql:8.0.41
