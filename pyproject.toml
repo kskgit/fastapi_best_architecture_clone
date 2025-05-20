@@ -1,10 +1,7 @@
 [project]
 name = "fastapi_best_architecture"
-version = "0.0.1"
-description = """
-A RBAC (Role-Based Access Control) permission control system built on FastAPI, featuring a unique pseudo-three-tier
-architecture design, with built-in basic implementation of fastapi admin as a template library, free and open-source.
-"""
+version = "0.1.0"
+description = "FastAPI Best Architecture"
 authors = [
     { name = "Wu Clan", email = "jianhengwu0407@gmail.com" },
 ]
@@ -74,3 +71,10 @@ default-groups = ["dev", "lint"]
 [[tool.uv.index]]
 name = "aliyun"
 url = "https://mirrors.aliyun.com/pypi/simple"
+
+
+testpaths = [
+    "backend/tests"
+]
+python_files = ["test_*.py"]
+asyncio_mode = "auto"
